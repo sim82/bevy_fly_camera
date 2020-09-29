@@ -68,6 +68,8 @@ pub struct FlyCamera {
 	pub key_down: KeyCode,
 	/// If `false`, disable keyboard control of the camera. Defaults to `true`
 	pub enabled: bool,
+	/// If 'true' mouse input is only used while left button in pressed. Defaults to 'false'
+	pub mouse_drag: bool,
 }
 impl Default for FlyCamera {
 	fn default() -> Self {
@@ -86,6 +88,7 @@ impl Default for FlyCamera {
 			key_up: KeyCode::Space,
 			key_down: KeyCode::LShift,
 			enabled: true,
+			mouse_drag: false,
 		}
 	}
 }
@@ -188,6 +191,7 @@ fn mouse_motion_system(
 	time: Res<Time>,
 	mut state: ResMut<State>,
 	mouse_motion_events: Res<Events<MouseMotion>>,
+	mouse_button_input: Res<Input<MouseButton>>,
 	mut query: Query<(&mut FlyCamera, &mut Transform)>,
 ) {
 	let mut delta: Vec2 = Vec2::zero();
@@ -199,7 +203,9 @@ fn mouse_motion_system(
 	}
 
 	for (mut options, mut transform) in &mut query.iter() {
-		if !options.enabled {
+		if !options.enabled
+		   || (options.mouse_drag && !mouse_button_input.pressed(MouseButton::Left))
+		{
 			continue;
 		}
 		options.yaw -= delta.x() * options.sensitivity * time.delta_seconds;
