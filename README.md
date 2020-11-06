@@ -22,7 +22,7 @@ fn setup(mut commands: Commands) {
 
 fn main() {
   App::build()
-    .add_default_plugins()
+    .add_plugins(DefaultPlugins)
     .add_startup_system(setup.system())
     .add_plugin(FlyCameraPlugin)
     .run();
@@ -39,3 +39,4 @@ Check out the [simple example](examples/basic.rs)
 | `0.1.3`      | `0.3.0`                   |
 | `0.2`        | `0.4.0`                   |
 | `0.2.1`      | `0.4.1`                   |
+| `0.3.0`      | `0.5.0`                   |
